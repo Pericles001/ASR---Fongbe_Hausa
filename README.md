@@ -42,7 +42,7 @@ Low-resource African languages lack the text corpora needed to train language mo
 
 1. **Data Curation** — Constructing a unified 12.3-hour Fongbe speech dataset from two open sources.
 2. **Model Fine-Tuning** — Fine-tuning MMS-300M on the curated data, achieving state-of-the-art 9.48% WER on the ALFFA benchmark (78% relative reduction from the 44.04% baseline).
-3. **Large-Scale Transcription** — Applying the fine-tuned model (and an existing Hausa ASR model) to 1,553 YouTube videos (236 hours), producing ~6,770 transcribed segments as a semi-supervised corpus.
+3. **Large-Scale Transcription** — From a catalog of 1,553 YouTube videos (236 hours), sampling and transcribing 424 videos (45.49 hours: 24.91h Fongbe, 20.57h Hausa), producing ~6,770 transcribed segments as a semi-supervised corpus.
 
 ---
 
@@ -208,7 +208,7 @@ For Hausa, we used an existing fine-tuned Whisper-Small model developed by the N
 
 ### 3.1 Collection Methodology
 
-We collected 1,553 YouTube videos through two methods:
+We cataloged 1,553 YouTube videos through two methods:
 1. **Manual playlist curation** — Identifying and curating playlists of Fongbe and Hausa content across educational, cultural, music, and news domains.
 2. **Automated keyword search** — Using the YouTube Data API to search for videos in both languages across multiple content categories.
 
@@ -216,11 +216,21 @@ Audio was extracted using `yt-dlp`, converted to mono 16 kHz WAV format, and seg
 
 ### 3.2 Dataset Summary
 
+**Full Catalog (identified via YouTube API):**
+
 | Language | Videos | Hours | Channels | Domains |
 |----------|--------|-------|----------|---------|
 | Fongbe | 423 | 65 | 234 | Education, Music, Culture |
 | Hausa | 1,130 | 171 | 527 | News, Music, Culture |
 | **Total** | **1,553** | **236** | **761** | |
+
+**Processed Subset (transcribed):**
+
+| Language | Hours | Domains |
+|----------|-------|---------|
+| Fongbe | 24.91 | Education, Music, Culture |
+| Hausa | 20.57 | News, Music, Culture |
+| **Total (424 videos)** | **45.49** | |
 
 ### 3.3 Domain Breakdown
 
@@ -256,17 +266,19 @@ The dataset was collected using the YouTube Data API and web scraping tools (`se
 The full YouTube catalog was processed through a dual-language pipeline:
 
 ```
-YouTube Videos (1,553 videos, 236h)
+YouTube Catalog (1,553 videos, 236h)
     │
-    ├── Fongbe (423 videos, 65h)
-    │       │
-    │       └── Fine-tuned MMS-300M → Fongbe transcriptions
-    │
-    └── Hausa (1,130 videos, 171h)
+    └── Sampled 424 videos (45.49h)
             │
-            └── NCAIR Whisper-Small → Hausa transcriptions
-    │
-    └── Output: ~6,770 audio-transcription pairs (Parquet format)
+            ├── Fongbe (24.91h)
+            │       │
+            │       └── Fine-tuned MMS-300M → Fongbe transcriptions
+            │
+            └── Hausa (20.57h)
+                    │
+                    └── NCAIR Whisper-Small → Hausa transcriptions
+            │
+            └── Output: ~6,770 audio-transcription pairs (Parquet format)
 ```
 
 ### 4.2 Corpus Statistics
@@ -414,7 +426,7 @@ If you use any of these resources in your research, please cite the following:
 |----------|-------------|--------|
 | Curated Fongbe Dataset | 13,581 utterances, 12.3h, tone-preserved | HuggingFace Dataset |
 | Fine-Tuned MMS-300M | Fongbe ASR, 9.48% WER | HuggingFace Model (Safetensors) |
-| YouTube Video Dataset | 1,553 videos, 236h, metadata | CSV |
+| YouTube Video Dataset | 1,553 videos cataloged, 424 processed (45.49h) | CSV |
 | Semi-Supervised Corpus | ~6,770 transcribed segments | Parquet (HuggingFace Dataset) |
 
 > All resource links are anonymized for double-blind review and will be made public upon acceptance.
