@@ -1,0 +1,11 @@
+{
+  "name": "asr-fongbe-hausa-docs",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "marked": "^15.0.0"
+  }
+}
